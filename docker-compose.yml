@@ -1,17 +1,29 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo
-    container_name: mongodb
+  db:
+    image: postgres
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: secret
-    ports:
-      - "27017:27017"
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: sell_db
     volumes:
-      - mongo_data:/data/db
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://admin:123456@db:5432/sell_db?schema=public
+    depends_on:
+      - db
 
 volumes:
-  mongo_data:
+  db_data:
