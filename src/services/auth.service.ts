@@ -4,6 +4,8 @@ import { isEmail } from "../untils/email.validate"
 import bcrypt from "bcrypt"
 import { canAttemptLogin, recordFailedAttempt, resetAttempts } from '~/untils/loginAttempts';
 import jwt  from 'jsonwebtoken';
+import { LoginDto } from '~/dtos/login.dto';
+import {appConfig} from "../config/app.config"
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) { }
 
@@ -19,18 +21,27 @@ export class AuthService {
     const user = await this.prismaService.user.create({ data: { email: registerdto.email, password: hashPass, name: registerdto.name } })
     console.log("đki thành công")
   }
-  async login(registerdto: RegisterDto): Promise<void> {
-    if (!registerdto.email) throw new Error("vui lòng nhập email")
-    if (!registerdto.password) throw new Error('vui lòng nhập password');
-    if (!canAttemptLogin(registerdto.email)) throw new Error('Tài khoản bị khóa tạm thời. Thử lại sau 15 phút.')
-    const user = await this.prismaService.user.findUnique({ where: { email: registerdto.email } })
+  async login(LoginDto: LoginDto): Promise<void> {
+    if (!LoginDto.email) throw new Error("vui lòng nhập email")
+    if (!LoginDto.password) throw new Error('vui lòng nhập password');
+    if (!canAttemptLogin(LoginDto.email)) throw new Error('Tài khoản bị khóa tạm thời. Thử lại sau 15 phút.')
+    const user = await this.prismaService.user.findUnique({ where: { email: LoginDto.email } })
     if (!user) throw new Error('không tồn tại user email này')
-    const pwdMatch = await bcrypt.compare(registerdto.password, user.password)
+    const pwdMatch = await bcrypt.compare(LoginDto.password, user.password)
     if (!pwdMatch) {
-      recordFailedAttempt(registerdto.email)
+      recordFailedAttempt(LoginDto.email)
       throw new Error('sai mật khẩu');
     }
-    resetAttempts(registerdto.email)
-    const accessToken = jwt.sign
+    resetAttempts(LoginDto.email)
+    const accessToken = jwt.sign({id:user.id, email: user.email}, process.env.TOKEN_REFRESH as string,
+      {
+        expiresIn:"1h"
+      }
+    );
+    const refreshToken = jwt.sign({id:user.id, email: user.email}, appConfig.refreshJWT,
+      {
+        expiresIn:"7d"
+      }
+    );
   }
 }
