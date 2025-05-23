@@ -4,5 +4,6 @@ config()
 
 export const appConfig: Config = {
   port: parseInt(process.env.PORT || '3000', 10),
-  tokenJWT: process.env.TOKEN_SECRET || ""
+  tokenJWT: process.env.TOKEN_SECRET || "",
+  refreshJWT:process.env.TOKEN_REFRESH || ""
 }

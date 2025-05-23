@@ -9,11 +9,9 @@ const authService = new AuthService(prisma)
 const authController = new AuthController(authService)
 
 // TODO: LOGIN
-router.post('/login', (req, res) => {
-  console.log('login')
-})
+router.post('/login',(req, res) => {})
 // TODO: RREGISTER
-router.post('/register', (req, res) => {})
+router.post('/register',authController.register)
 // TODO: REFRESH TOKEN
 router.post('/refresh-token', (req, res) => {})
 // TODO: LOGOUT
