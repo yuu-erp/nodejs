@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { LoginDto } from '../dtos/login.dto';
 import { appConfig } from "../config/app.config"
 import { User } from "@prisma/client"
+import { refreshtoken } from '../dtos/refreshtoken.dto';
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) { }
 
@@ -51,13 +52,45 @@ export class AuthService {
       }
     );
     user.refreshtokenDB = refreshToken
-    const saveUser = await this.prismaService.user.update({
-      where: {id:user.id},
-      
+   await this.prismaService.user.update({
+      where: { id: user.id },
+
       data: {
         refreshtokenDB: refreshToken
       }
     });
-    return {accessToken,refreshToken}
+    return { accessToken, refreshToken }
+  }
+  async refrestoken(refreshDto: refreshtoken): Promise<{ accessToken: string; refreshToken: string }> {
+    if (!refreshDto.refreshToken) throw new Error("vui lòng điền refreshtoken")
+    const decodeToken: any = jwt.verify(refreshDto.refreshToken, appConfig.refreshJWT)
+    if (!decodeToken) throw new Error("không tìm thấy refresh token DB")
+    const user = await this.prismaService.user.findUnique({
+      where: { id: decodeToken.id }
+    })
+    if (!user) throw new Error("không tìm thấy user")
+    if (user?.refreshtokenDB !== refreshDto.refreshToken) throw new Error("sai token")
+    const newAccessToken = jwt.sign({ id: user.id, email: user.email }, process.env.TOKEN_REFRESH as string,
+      {
+        expiresIn: "1h"
+      }
+    );
+    const newRefreshToken = jwt.sign({ id: user.id, email: user.email }, appConfig.refreshJWT,
+      {
+        expiresIn: "7d"
+      }
+    );
+    user.refreshtokenDB = newRefreshToken
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: {
+        refreshtokenDB: newRefreshToken
+      }
+    });
+
+    return{
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken
+  };
   }
 }

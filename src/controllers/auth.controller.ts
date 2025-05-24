@@ -1,5 +1,6 @@
 import { AuthService } from '~/services/auth.service'
 import { Request, Response } from 'express'
+import { canAttemptLogin, recordFailedAttempt } from '../untils/loginAttempts'
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
@@ -22,4 +23,14 @@ export class AuthController {
       res.status(500).json({ message: (error as Error).message })
     }
   }
+ refreshtoken = async(req: Request, res: Response)=>{
+  try {
+      const sendRefresh = await this.authService.refrestoken(req.body)
+      res.status(201).json(sendRefresh)
+    } catch (error: unknown) {
+      res.status(500).json({ message: (error as Error).message })
+    }
+
+ }
+  
 }

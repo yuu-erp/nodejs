@@ -2,7 +2,6 @@ const attempts: Record<string, { count: number, lastAttempt: number }> = {}
 export function canAttemptLogin(email: string): boolean {
   const now = Date.now();
   const record = attempts[email];
-
   if (!record) return true;
 
   if (now - record.lastAttempt > 15 * 60 * 1000) {
@@ -12,6 +11,7 @@ export function canAttemptLogin(email: string): boolean {
 
   return record.count < 5;
 }
+
 export function recordFailedAttempt(email: string): void {
   const now = Date.now();
   if (!attempts[email]) {
