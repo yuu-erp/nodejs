@@ -32,5 +32,13 @@ export class AuthController {
     }
 
  }
+ logout = async(req: Request, res: Response)=>{
+  try {
+      const sendLogout = await this.authService.logout(req.body)
+      res.status(201).json(sendLogout)
+    } catch (error: unknown) {
+      res.status(500).json({ message: (error as Error).message })
+    }
+ }
   
 }

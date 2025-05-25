@@ -15,5 +15,5 @@ router.post('/register',authController.register)
 // TODO: REFRESH TOKEN
 router.post('/refresh-token', authController.refreshtoken)
 // TODO: LOGOUT
-router.post('/logout', (req, res) => {})
+router.post('/logout', authController.logout)
 export default router

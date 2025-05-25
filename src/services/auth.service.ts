@@ -93,4 +93,19 @@ export class AuthService {
     refreshToken: newRefreshToken
   };
   }
+  async logout (refreshDto:refreshtoken){
+    if(!refreshDto.refreshToken) throw new Error("vui lòng điền refesh")
+      const decoded:any = jwt.verify(refreshDto.refreshToken, appConfig.refreshJWT)
+    if(!decoded) throw new Error ("sai token hoặc token hết hạn")
+      const user = await this.prismaService.user.findUnique({
+    where:{id:decoded.id}
+    })
+    if(!user) throw new Error("không tìm thấy user")
+    await this.prismaService.user.update({
+      where:{id:user.id},
+      data:{
+        refreshtokenDB:null
+      }
+    })
+  }
 }
