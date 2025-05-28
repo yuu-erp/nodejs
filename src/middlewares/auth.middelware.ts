@@ -1,25 +1,20 @@
-import { Response, Request, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { appConfig } from '../config/app.config'
 
-type RequestWithUser = Request & {
-  user?: {
-    id: string
-    email: string
-  }
-}
-
-const AuthMiddlerware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+const authMiddlerware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header('Authorization')
+    const token = req.header('Authorization')?.split(' ')[1]
+    console.log(token)
     if (!token) {
       return res.status(401).json({ message: 'khoogn tìm thấy token' })
     }
     const decodeToken = jwt.verify(token, appConfig.tokenJWT)
-    req.user = decodeToken as { id: string; email: string }
+    ;(req as any).user = decodeToken as { id: string; email: string; role: string }
     next()
   } catch (error: unknown) {
+    console.log(error)
     res.status(401).json({ message: 'token không hợp lệ' })
   }
 }
-export default AuthMiddlerware
+export default authMiddlerware

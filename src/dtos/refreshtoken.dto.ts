@@ -1,3 +1,4 @@
-export interface refreshtoken{
-    refreshToken : string
+export interface RefreshtokenPayloadDto {
+  id: string
+  email: string
 }
