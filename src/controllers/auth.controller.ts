@@ -41,6 +41,7 @@ export class AuthController {
 
   private getMaxAge = (expiresIn: string): number => {
     const match = expiresIn.match(/^(\d+)([smhd])$/)
+    console.log('match', match)
     if (!match) return 0
 
     const value = parseInt(match[1])
