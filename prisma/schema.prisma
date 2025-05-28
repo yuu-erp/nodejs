@@ -7,25 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id          String   @id @default(uuid())
-  email       String   @unique
-  name        String?
-  password    String
-  role        String   @default("user")
-  address     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  phoneNumber String?
-  refreshtokenDB String?
+enum Role {
+  USER
+  ADMIN
 }
 
-model Product {
-  id          String   @id @default(uuid())
-  name        String
-  price       Int
-  description String?
-  imageUrl    String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  name           String?
+  passwordHash   String   // đổi tên từ `password` cho rõ ràng
+  role           Role     @default(USER) // dùng enum thay vì string thuần
+  address        String?
+  phoneNumber    String?
+  refreshToken   String?  // đổi tên rõ nghĩa hơn, camelCase
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

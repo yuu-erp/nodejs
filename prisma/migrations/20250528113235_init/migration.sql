@@ -1,14 +1,16 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
-    "password" TEXT NOT NULL,
-    "role" TEXT NOT NULL DEFAULT 'user',
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "isEmailVerified" BOOLEAN NOT NULL DEFAULT false,
-    "phoneNumber" TEXT,
+    "passwordHash" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
     "address" TEXT,
+    "phoneNumber" TEXT,
+    "refreshToken" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
