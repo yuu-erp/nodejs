@@ -3,9 +3,13 @@ import { Request, Response } from 'express'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import { appConfig } from '../config/app.config'
 import { UserRepository } from '../repositories/user.repository'
+import { LoggerService } from '../services/logger.service'
 
 export class AuthController {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly logger: LoggerService
+  ) {}
 
   private generateAccessToken = (user: { id: string; email: string }): string =>
     jwt.sign(
@@ -25,7 +29,7 @@ export class AuthController {
       } as SignOptions
     )
 
-  private setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
+  private setAuthCookies = (res: Response, accessToken: string, refreshToken: string): void => {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -41,7 +45,6 @@ export class AuthController {
 
   private getMaxAge = (expiresIn: string): number => {
     const match = expiresIn.match(/^(\d+)([smhd])$/)
-    console.log('match', match)
     if (!match) return 0
 
     const value = parseInt(match[1])
@@ -53,6 +56,7 @@ export class AuthController {
   register = async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password, name } = req.body
+      this.logger.info('Registering user', { email, name, password })
       if (!email || !password) {
         res.status(400).json({ message: 'Email and password are required' })
         return
