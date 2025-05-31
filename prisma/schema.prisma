@@ -23,4 +23,20 @@ model User {
   refreshToken   String?  // đổi tên rõ nghĩa hơn, camelCase
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  products       Product[] 
+}
+model Product {
+   id          String   @id @default(uuid())
+  name        String   
+  description String?  
+  price       Float    
+  imageUrl    String?  
+  volume      Int      
+  origin      String?  
+  stock       Int      
+  category    String?  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   // Người đăng sản phẩm (admin hoặc nhà cung cấp)
+  user        User     @relation(fields: [userId], references: [id])
 }

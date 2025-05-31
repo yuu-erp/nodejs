@@ -7,7 +7,7 @@ import { UserRepository } from '../repositories/user.repository'
 export class AuthController {
   constructor(private readonly userRepository: UserRepository) {}
 
-  private generateAccessToken = (user: { id: string; email: string }): string =>
+  private generateAccessToken = (user: { id: string; email: string }): string => // khoogn có {} có nghĩa là return thẳng ra. Có {} phải có return
     jwt.sign(
       { userId: user.id, email: user.email },
       appConfig.jwtAccessSecret as string,
@@ -42,7 +42,7 @@ export class AuthController {
   private getMaxAge = (expiresIn: string): number => {
     const match = expiresIn.match(/^(\d+)([smhd])$/)
     if (!match) return 0
-
+    console.log
     const value = parseInt(match[1])
     const unit = match[2]
     const multipliers = { s: 1000, m: 60000, h: 3600000, d: 86400000 }
@@ -112,7 +112,7 @@ export class AuthController {
         return
       }
 
-      const decoded = jwt.verify(refreshToken, appConfig.jwtRefreshSecret as string) as { userId: string }
+      const decoded = jwt.verify(refreshToken, appConfig.jwtRefreshSecret) as { userId: string }
       const user = await this.userRepository.findUserById(decoded.userId)
 
       if (!user || user.refreshToken !== refreshToken) {
