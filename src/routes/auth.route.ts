@@ -3,13 +3,16 @@ import { AuthController } from '../controllers/auth.controller'
 import { UserRepository } from '../repositories/user.repository'
 import { LoggerService } from '../services/logger.service'
 import { PrismaService } from '../services/prisma.service'
+import { AuthService } from '../services/auth.service'
+import { authMiddleware } from '../middlewares/auth.middleware'
 
 const router = Router()
 
 const prismaService = new PrismaService()
 const logger = new LoggerService()
 const userRepository = new UserRepository(prismaService)
-const authController = new AuthController(userRepository, logger)
+const authService = new AuthService()
+const authController = new AuthController(userRepository, logger, authService)
 
 /**
  * @route POST /register
@@ -39,7 +42,7 @@ router.post('/login', authController.login)
  * @returns {200} New access token issued
  * @returns {401} Invalid or expired refresh token
  */
-router.post('/refresh-token', authController.refreshToken)
+router.post('/refresh-token', authMiddleware, authController.refreshToken)
 
 /**
  * @route POST /logout
@@ -49,6 +52,16 @@ router.post('/refresh-token', authController.refreshToken)
  * @returns {200} Logged out successfully
  * @returns {400} Error while logging out
  */
-router.post('/logout', authController.logout)
+router.post('/logout', authMiddleware, authController.logout)
+
+/**
+ * @route POST /register-admin
+ * @group Auth - User authentication
+ * @summary Register a new admin
+ * @param {object} req.body.required - Admin registration info (e.g. email, password, name)
+ * @returns {201} Admin registered successfully
+ * @returns {400} Invalid input or user already exists
+ */
+router.post('/register-admin', authController.registerAdmin)
 
 export default router

@@ -1,2 +1,12 @@
 {"level":30,"time":1748448279829,"pid":67120,"hostname":"Les-MacBook-Pro.local","email":"hoan2@gmail.com","name":"Lê Khải Hoàn","password":"123","msg":"Registering user"}
 {"level":30,"time":1748498557382,"pid":74095,"hostname":"Les-MacBook-Pro.local","email":"hoan3@gmail.com","name":"Lê Khải Hoàn","password":"123","msg":"Registering user"}
+{"level":50,"time":1748750869139,"pid":26511,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":50,"time":1748750912461,"pid":26687,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":50,"time":1748750937860,"pid":26773,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":50,"time":1748750965568,"pid":26866,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":50,"time":1748750971930,"pid":26866,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":50,"time":1748750988543,"pid":26950,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":50,"time":1748751002112,"pid":27005,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":50,"time":1748751009568,"pid":27037,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
+{"level":30,"time":1748751444644,"pid":28355,"hostname":"Les-MacBook-Pro.local","email":"admin123@gmail.com","name":"admin1","password":"123","msg":"Registering admin"}
+{"level":30,"time":1748751521218,"pid":28710,"hostname":"Les-MacBook-Pro.local","email":"admin123@gmail.com","name":"admin1","password":"123","msg":"Registering admin"}

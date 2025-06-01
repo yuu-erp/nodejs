@@ -12,6 +12,20 @@ enum Role {
   ADMIN
 }
 
+enum MimeType {
+  IMAGE_PNG
+  IMAGE_JPEG
+  IMAGE_GIF
+  PDF
+  VIDEO_MP4
+}
+
+enum MediaStatus {
+  UPLOADED
+  PROCESSING
+  DELETED
+}
+
 model User {
   id           String   @id @default(uuid())
   email        String   @unique
@@ -27,11 +41,16 @@ model User {
 }
 
 model Media {
-  id         String   @id @default(uuid())
-  url        String // đường dẫn tới file (local hoặc URL S3)
-  type       String // ví dụ: image/png, application/pdf
-  size       Int // kích thước file tính bằng byte
-  uploadedAt DateTime @default(now())
-  user       User?    @relation(fields: [userId], references: [id])
-  userId     String?
+  id           String       @id @default(uuid())
+  url          String // Đường dẫn tới file (local hoặc URL S3)
+  mimeType     MimeType // MIME type của file, dùng enum để nhất quán
+  size         Int // Kích thước file (byte)
+  originalName String? // Tên file gốc (optional)
+  description  String? // Mô tả file (optional)
+  status       MediaStatus? // Trạng thái file (optional, nếu cần)
+  uploadedAt   DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt // Thêm để theo dõi cập nhật
+  user         User         @relation(fields: [userId], references: [id]) // Quan hệ bắt buộc
+  userId       String
+  @@index([userId]) // Thêm chỉ mục cho userId
 }

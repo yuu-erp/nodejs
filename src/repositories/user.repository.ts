@@ -4,7 +4,12 @@ import { PrismaService } from '../services/prisma.service'
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(user: { email: string; name: string; passwordHash: string }): Promise<User> {
+  async createUser(user: {
+    email: string
+    name: string
+    passwordHash: string
+    role?: 'ADMIN' | 'USER'
+  }): Promise<User> {
     return await this.prisma.user.create({ data: user })
   }
 
