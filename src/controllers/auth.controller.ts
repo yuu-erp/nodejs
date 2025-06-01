@@ -49,6 +49,7 @@ export class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password } = req.body
+      this.logger.info('Logging in user', { email, password })
       if (!email || !password) {
         res.status(400).json({ message: 'Email and password are required' })
         return
@@ -81,6 +82,7 @@ export class AuthController {
     try {
       const userReq = req.user
       const refreshToken = req.cookies?.refreshToken
+      this.logger.info('Refreshing token', { userReq, refreshToken })
       if (!userReq?.id) {
         res.status(401).json({ message: 'Unauthorized' })
         return
@@ -113,6 +115,7 @@ export class AuthController {
   logout = async (req: Request, res: Response): Promise<void> => {
     try {
       const userReq = req.user
+      this.logger.info('Logging out user', { userReq })
       if (!userReq?.id) {
         res.status(401).json({ message: 'Unauthorized' })
         return
