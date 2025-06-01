@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.route'
 import uploadRoutes from './routes/upload.route'
 import { PrismaService } from './services/prisma.service'
 import fileUpload, { UploadedFile } from 'express-fileupload'
+import { errorHandlerMiddleware } from './middlewares/error-handler.middleware'
 
 const app = express()
 const PORT = appConfig.port
@@ -28,6 +29,8 @@ app.use('/', async (req, res) => {
   const users = await prisma.user.findMany()
   res.json(users)
 })
+
+app.use(errorHandlerMiddleware)
 
 app.listen(PORT, async () => {
   console.log(`Server is running on http://localhost:${PORT}/api/v1`)
