@@ -10,3 +10,7 @@
 {"level":50,"time":1748751009568,"pid":27037,"hostname":"Les-MacBook-Pro.local","error":{},"msg":"Login user error"}
 {"level":30,"time":1748751444644,"pid":28355,"hostname":"Les-MacBook-Pro.local","email":"admin123@gmail.com","name":"admin1","password":"123","msg":"Registering admin"}
 {"level":30,"time":1748751521218,"pid":28710,"hostname":"Les-MacBook-Pro.local","email":"admin123@gmail.com","name":"admin1","password":"123","msg":"Registering admin"}
+{"level":30,"time":1748869670936,"pid":89365,"hostname":"Les-MacBook-Pro.local","email":"admin123@gmail.com","name":"admin1","password":"123","msg":"Registering admin"}
+{"level":30,"time":1748869701855,"pid":89365,"hostname":"Les-MacBook-Pro.local","email":"admin1234@gmail.com","name":"admin2","password":"123","msg":"Registering admin"}
+{"level":30,"time":1748869851847,"pid":90345,"hostname":"Les-MacBook-Pro.local","email":"admin1234@gmail.com","name":"admin2","password":"123","msg":"Registering admin"}
+{"level":30,"time":1748869863337,"pid":90345,"hostname":"Les-MacBook-Pro.local","email":"admin12345@gmail.com","name":"admin3","password":"123","msg":"Registering admin"}

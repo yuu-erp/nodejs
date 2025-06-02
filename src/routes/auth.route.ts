@@ -5,6 +5,7 @@ import { LoggerService } from '../services/logger.service'
 import { PrismaService } from '../services/prisma.service'
 import { AuthService } from '../services/auth.service'
 import { authMiddleware } from '../middlewares/auth.middleware'
+import { checkApiKey } from '../middlewares/CheckApiKey'
 
 const router = Router()
 
@@ -62,6 +63,6 @@ router.post('/logout', authMiddleware, authController.logout)
  * @returns {201} Admin registered successfully
  * @returns {400} Invalid input or user already exists
  */
-router.post('/register-admin', authController.registerAdmin)
+router.post('/register-admin', checkApiKey, authController.registerAdmin)
 
 export default router
