@@ -11,5 +11,6 @@ const userRepository = new UserRepository(prismaService)
 const adminUserController = new AdminUserController(userRepository)
 
 router.post('/create-user', authMiddleware, adminUserController.createUser)
+router.post('/update-user', authMiddleware, adminUserController.updateUser)
 
 export default router

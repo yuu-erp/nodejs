@@ -3,8 +3,8 @@ import express from 'express'
 import { appConfig } from './config/app.config'
 import authRoutes from './routes/auth.route'
 import uploadRoutes from './routes/upload.route'
+import adminUserRoutes from "./routes/admin-user.route"
 import { PrismaService } from './services/prisma.service'
-import fileUpload, { UploadedFile } from 'express-fileupload'
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware'
 
 const app = express()
@@ -14,16 +14,11 @@ const prisma = new PrismaService()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) // Parse URL-encoded bodies
 app.use(cookieParser())
-// app.use(
-//   fileUpload({
-//     limits: { fileSize: 8 * 1024 * 1024 }, // 8MB file size limit
-//     abortOnLimit: true, // Stop upload if limit is exceeded
-//     createParentPath: true // Automatically create parent folder if it doesn't exist
-//   })
-// )
+
 
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1', uploadRoutes)
+app.use('/api/v1/admin-user',adminUserRoutes)
 
 app.use('/', async (req, res) => {
   const users = await prisma.user.findMany()

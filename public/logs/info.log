@@ -14,3 +14,9 @@
 {"level":30,"time":1748869701855,"pid":89365,"hostname":"Les-MacBook-Pro.local","email":"admin1234@gmail.com","name":"admin2","password":"123","msg":"Registering admin"}
 {"level":30,"time":1748869851847,"pid":90345,"hostname":"Les-MacBook-Pro.local","email":"admin1234@gmail.com","name":"admin2","password":"123","msg":"Registering admin"}
 {"level":30,"time":1748869863337,"pid":90345,"hostname":"Les-MacBook-Pro.local","email":"admin12345@gmail.com","name":"admin3","password":"123","msg":"Registering admin"}
+{"level":30,"time":1749008901057,"pid":14212,"hostname":"Admin-PC","email":"vinh@gmail.com","name":"vinh","password":"123","msg":"Registering user"}
+{"level":30,"time":1749008928472,"pid":14212,"hostname":"Admin-PC","email":"vinh@gmail.com","password":"123","msg":"Logging in user"}
+{"level":30,"time":1749009778594,"pid":10584,"hostname":"Admin-PC","email":"ti@gmail.com","name":"ti","password":"123","msg":"Registering admin"}
+{"level":50,"time":1749009798632,"pid":10584,"hostname":"Admin-PC","error":{},"msg":"Login user error"}
+{"level":30,"time":1749009816706,"pid":10584,"hostname":"Admin-PC","email":"ti@gmail.com","password":"123","msg":"Logging in user"}
+{"level":30,"time":1749013212177,"pid":16720,"hostname":"Admin-PC","email":"ti@gmail.com","password":"123","msg":"Logging in user"}

@@ -1,14 +1,16 @@
 import { UserRepository } from '../repositories/user.repository'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
+import { isAdmined } from '../utils/isAdmin'
+import { runInThisContext } from 'node:vm'
 
 export class AdminUserController {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
   createUser = async (req: Request, res: Response) => {
     try {
-      const userReq = req.user
-      if (userReq?.role !== 'ADMIN') {
+
+      if (!req.user || !isAdmined(req.user)) {
         res.status(403).json({ message: 'Forbidden' })
         return
       }
@@ -22,11 +24,46 @@ export class AdminUserController {
     }
   }
 
-  updateUser = async (req: Request, res: Response) => {}
-  
-  delete = () => {}
+  updateUser = async (req: Request, res: Response) => {
+    try {
+      if (!req.user || !isAdmined(req.user)) {
+        res.status(403).json({ message: 'Forbidden' })
+        return
+      }
+      const { email, name } = req.body
+      if (!email || !name) throw new Error("vui lòng điền thông tin")
+      const userId = await this.userRepository.findUserById(req.user.id)
+      if (!userId) throw new Error("không tìm thấy user")
+      const updateUser = await this.userRepository.updateUser(
+        userId.id,
+        req.body
+      )
+      res.status(201).json({ message: 'User updated successfully', updateUser })
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' })
+      return
+    }
+  }
 
-  getUsers = async (req: Request, res: Response) => {}
+  delete = async (req: Request, res: Response) => {
+    try {
+      const idUser = req.params.id
+      if (!idUser) throw new Error("Cần truyền param id")
+      const user = await this.userRepository.findUserById(idUser)
+      if (!user) throw new Error("không tìm thấy hoặc đã xóa")
+       await this.userRepository.deleteUser(idUser)
+     return res.status(200).json({ message: "Xóa người dùng thành công" });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' })
+      return
+    }
+  }
 
-  getUserById = async (req: Request, res: Response) => {}
+  getUsers = async (req: Request, res: Response) => {
+    return await this.userRepository.findAllUsers()
+  }
+
+  getUserById = async (req: Request, res: Response) => {
+    return await this.userRepository.findUserByEmail(req.params.email)
+  }
 }
