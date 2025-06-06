@@ -12,5 +12,9 @@ const adminUserController = new AdminUserController(userRepository)
 
 router.post('/create-user', authMiddleware, adminUserController.createUser)
 router.post('/update-user', authMiddleware, adminUserController.updateUser)
+router.delete('/delete-user/:id', authMiddleware, adminUserController.deleteUser)
+router.get('/get-user', authMiddleware, adminUserController.getUsers)
+router.get('/get-userEmail', authMiddleware, adminUserController.getUserById)
+
 
 export default router

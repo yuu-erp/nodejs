@@ -30,13 +30,13 @@ export class AdminUserController {
         res.status(403).json({ message: 'Forbidden' })
         return
       }
-      const { email, name } = req.body
-      if (!email || !name) throw new Error("vui lòng điền thông tin")
+      const inf = req.body
+      if (!inf) throw new Error("vui lòng điền thông tin")
       const userId = await this.userRepository.findUserById(req.user.id)
       if (!userId) throw new Error("không tìm thấy user")
       const updateUser = await this.userRepository.updateUser(
         userId.id,
-        req.body
+        inf
       )
       res.status(201).json({ message: 'User updated successfully', updateUser })
     } catch (error) {
@@ -45,14 +45,15 @@ export class AdminUserController {
     }
   }
 
-  delete = async (req: Request, res: Response) => {
+  deleteUser = async (req: Request, res: Response) => {
     try {
       const idUser = req.params.id
       if (!idUser) throw new Error("Cần truyền param id")
       const user = await this.userRepository.findUserById(idUser)
       if (!user) throw new Error("không tìm thấy hoặc đã xóa")
-       await this.userRepository.deleteUser(idUser)
-     return res.status(200).json({ message: "Xóa người dùng thành công" });
+      await this.userRepository.deleteUser(idUser)
+      res.status(200).json({ message: "Xóa người dùng thành công" });
+      return
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' })
       return
@@ -60,10 +61,12 @@ export class AdminUserController {
   }
 
   getUsers = async (req: Request, res: Response) => {
-    return await this.userRepository.findAllUsers()
+    await this.userRepository.findAllUsers()
+    return 
   }
 
   getUserById = async (req: Request, res: Response) => {
-    return await this.userRepository.findUserByEmail(req.params.email)
+    await this.userRepository.findUserByEmail(req.params.email)
+    return 
   }
 }
