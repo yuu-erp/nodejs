@@ -1,9 +1,12 @@
 import { ProductRepostory } from "../repositories/product.repository";
 import { Request, Response } from "express";
 import { isAdmined } from "../utils/isAdmin";
+import { MediaRepository } from "../repositories/media.repository";
 
 export class ProductController {
-    constructor(private readonly productRepostory: ProductRepostory) { }
+    constructor(private readonly productRepostory: ProductRepostory,
+        private readonly mediaRepotori: MediaRepository
+    ) { }
     createProduct = async (req: Request, res: Response) => {
         try {
             if (!req.user || !isAdmined(req.user)) {
@@ -43,8 +46,31 @@ export class ProductController {
             res.status(500).json({ message: (error as Error).message })
         }
     }
-    deleteProduct = async(req: Request, res: Response)=>{
+    deleteProduct = async (req: Request, res: Response) => {
+        try {
+            if (!req.user || !isAdmined(req.user)) {
+                res.status(403).json({ message: 'Forbidden' })
+                return
+            }
+            const itemId = req.params.id
+            if (!itemId) throw new Error("không tìm thấy sản phẩm")
+            const findItem = await this.productRepostory.findItemById(itemId)
+            if (!findItem) throw new Error("không tìm thấy id sản phẩm")
+            await this.productRepostory.deleteItem(itemId)
+            const lengthImage = findItem.imageId
+            const imageIdToDelete: string | null = lengthImage
+            const arrImage: string[] = []
+            if (typeof imageIdToDelete === 'string' && imageIdToDelete.length > 0) {
+                arrImage.push(imageIdToDelete);
+            }
+            if (arrImage.length > 0) {
+                await this.mediaRepotori.removeManymedia(arrImage)
+            }
 
+
+        } catch (error) {
+            res.status(500).json({ message: (error as Error).message })
+        }
     }
 
 }

@@ -59,7 +59,8 @@ model Media {
   updatedAt    DateTime     @updatedAt // Thêm để theo dõi cập nhật
   user         User         @relation(fields: [userId], references: [id]) // Quan hệ bắt buộc
   userId       String
-  Product      Product[]
+  productId  Product? @relation(fields: [product], references: [id])
+  product String?
 
   @@index([userId]) // Thêm chỉ mục cho userId
 }
@@ -71,8 +72,7 @@ model Product {
   price       Int // Giá bán (đơn vị: VNĐ)
   stock       Int // Số lượng tồn kho
   status      ProductStatus @default(AVAILABLE) // Trạng thái hàng hóa
-  image      Media?     @relation(fields: [imageId], references: [id]) // Ảnh đại diện sản phẩm
-  imageId     String?
+  image      Media[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -80,5 +80,4 @@ model Product {
   createdById String
 
   @@index([createdById])
-  @@index([imageId])
 }
