@@ -4,6 +4,7 @@ import { appConfig } from './config/app.config'
 import authRoutes from './routes/auth.route'
 import uploadRoutes from './routes/upload.route'
 import adminUserRoutes from "./routes/admin-user.route"
+import productRoutes from "./routes/product.route"
 import { PrismaService } from './services/prisma.service'
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware'
 
@@ -19,6 +20,7 @@ app.use(cookieParser())
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1', uploadRoutes)
 app.use('/api/v1/admin-user',adminUserRoutes)
+app.use('/api/v1/product',productRoutes)
 
 app.use('/', async (req, res) => {
   const users = await prisma.user.findMany()

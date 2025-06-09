@@ -13,7 +13,8 @@ const primsa = new PrismaService
 const productRepo = new ProductRepostory(primsa)
 const ProductControllers = new ProductController(productRepo)
 route.post("/create-product", authMiddleware,ProductControllers.createProduct)
+route.post("/update-product/:id", authMiddleware,ProductControllers.updateProduct)
 
 
-
+export default route
 

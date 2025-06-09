@@ -11,7 +11,7 @@ const userRepository = new UserRepository(prismaService)
 const adminUserController = new AdminUserController(userRepository)
 
 router.post('/create-user', authMiddleware, adminUserController.createUser)
-router.post('/update-user', authMiddleware, adminUserController.updateUser)
+router.post('/update-user/:id', authMiddleware, adminUserController.updateUser)
 router.delete('/delete-user/:id', authMiddleware, adminUserController.deleteUser)
 router.get('/get-user', authMiddleware, adminUserController.getUsers)
 router.get('/get-userEmail', authMiddleware, adminUserController.getUserById)

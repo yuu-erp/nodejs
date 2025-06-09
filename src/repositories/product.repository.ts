@@ -20,7 +20,7 @@ export class ProductRepostory {
         return await this.productPrisma.product.findUnique({ where: { id } })
       }
     
-      async updateItem(id: string, item: Product) {
+      async updateItem(id: string, item:Partial< Product>) {
         return await this.productPrisma.product.update({ where: { id }, data: item })
       }
     
