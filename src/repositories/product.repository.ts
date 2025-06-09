@@ -1,8 +1,9 @@
-import { Product } from "@prisma/client";
-import { PrismaService } from "../services/prisma.service";
+import { Product } from '@prisma/client'
+import { PrismaService } from '../services/prisma.service'
 
 export class ProductRepostory {
-    constructor(private readonly productPrisma: PrismaService) { }
+  constructor(private readonly productPrisma: PrismaService) {}
+
 
     async createItem(item: {
         name: string;
@@ -31,5 +32,4 @@ export class ProductRepostory {
       async findAllItem(): Promise<Product[]> {
         return await this.productPrisma.product.findMany()
       }
-
-}
+    }
