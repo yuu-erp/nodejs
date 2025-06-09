@@ -13,7 +13,7 @@ export class ProductRepostory {
         createdById: string;
         imageId?: string;
     }): Promise<Product> {
-        return this.productPrisma.product.create({ data: item });
+        return await this.productPrisma.product.create({ data: item });
     }
     
       async findItemById(id: string): Promise<Product | null> {
@@ -21,7 +21,7 @@ export class ProductRepostory {
       }
     
       async updateItem(id: string, item: Product) {
-        return this.productPrisma.product.update({ where: { id }, data: item })
+        return await this.productPrisma.product.update({ where: { id }, data: item })
       }
     
       async deleteItem(id: string): Promise<Product> {
