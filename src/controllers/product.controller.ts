@@ -37,7 +37,7 @@ export class ProductController {
                 description: req.body.description ?? findItem.description,
                 price: req.body.price ?? findItem.price,
                 stock: req.body.stock ?? findItem.stock,
-                imageId: req.body.imageId ?? findItem.imageId
+                imageId: req.body.imageId ?? findItem
             }
             await this.productRepostory.updateItem(ItemId, updateItems)
             res.status(200).json({ message: 'Cập nhật thành công' });
@@ -57,7 +57,7 @@ export class ProductController {
             const findItem = await this.productRepostory.findItemById(itemId)
             if (!findItem) throw new Error("không tìm thấy id sản phẩm")
             await this.productRepostory.deleteItem(itemId)
-            const lengthImage = findItem.imageId
+            const lengthImage = findItem.
             const imageIdToDelete: string | null = lengthImage
             const arrImage: string[] = []
             if (typeof imageIdToDelete === 'string' && imageIdToDelete.length > 0) {

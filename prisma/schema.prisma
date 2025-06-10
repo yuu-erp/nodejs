@@ -72,7 +72,7 @@ model Product {
   price       Int // Giá bán (đơn vị: VNĐ)
   stock       Int // Số lượng tồn kho
   status      ProductStatus @default(AVAILABLE) // Trạng thái hàng hóa
-  image      Media[]
+  image       Media[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
