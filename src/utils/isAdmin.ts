@@ -1,7 +1,5 @@
-import { UserPayload } from "../type"
+import { UserPayload } from '../type'
 
-export const isAdmined = (payload : UserPayload):boolean =>{
-    
-        return payload.role === "ADMIN"
-    
+export const isAdmined = (payload: UserPayload): boolean => {
+  return payload.role === 'ADMIN'
 }

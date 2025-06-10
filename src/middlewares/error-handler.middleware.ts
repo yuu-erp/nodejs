@@ -1,21 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
+import { ApiResponseHandler } from '../utils'
 import { AppError } from '../error/app.error'
 
-export function errorHandlerMiddleware(err: Error, req: Request, res: Response, next: NextFunction) {
-  console.error(err)
-
+export const errorHandlerMiddleware = (err: AppError | Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof AppError) {
-    res.status(err.statusCode).json({
-      status: 'error',
-      message: err.message
-    })
+    ApiResponseHandler.error(res, { code: err.message, details: err.message }, err.message, err.statusCode)
     return
   }
 
-  // Lỗi không kiểm soát
-  res.status(500).json({
-    status: 'error',
-    message: 'Internal server error'
-  })
+  // Xử lý lỗi không xác định
+  ApiResponseHandler.error(res, { code: 'INTERNAL_SERVER_ERROR' }, 'Something went wrong', 500)
   return
 }
