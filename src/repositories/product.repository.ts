@@ -8,14 +8,31 @@ export class ProductRepostory {
 
   async createItem(item: {
     name: string
-    description: string
+    description?: string
     price: number
     stock: number
-    status: 'AVAILABLE' | 'OUT_OF_STOCK' | 'DISCONTINUED'
+    status?: 'AVAILABLE' | 'OUT_OF_STOCK' | 'DISCONTINUED'
     createdById: string
-    media?: []
+    mediaIds?: string[]
   }): Promise<Product> {
-    return await this.productPrisma.product.create({ data:item })
+    return await this.productPrisma.product.create({
+      data: {
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        stock: item.stock,
+        status: item.status,
+        createdById: item.createdById,
+        media: item.mediaIds
+          ? {
+              connect: item.mediaIds.map((id) => ({ id }))
+            }
+          : undefined
+      },
+      include: {
+        media: true
+      }
+    })
   }
 
   async findItemById(id: string): Promise<ProductWithMedia | null> {
