@@ -14,6 +14,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   try {
     const payload = jwt.verify(token, appConfig.jwtAccessSecret!) as UserPayload
     req.user = payload
+    console.log(req.user)
     next()
   } catch (err) {
     res.status(401).json({ message: 'Invalid token' })

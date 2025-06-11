@@ -5,6 +5,8 @@ import adminUserRoutes from './routes/admin/user.route'
 import authRoutes from './routes/public/auth.route'
 import { PrismaService } from './services/prisma.service'
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware'
+import uploadRoutes from './routes/admin/upload.route'
+import productRoutes from './routes/admin/product.route'
 
 const app = express()
 const PORT = appConfig.port
@@ -16,6 +18,8 @@ app.use(cookieParser())
 
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/admin/user', adminUserRoutes)
+app.use('/api/v1/admin/upload', uploadRoutes)
+app.use('/api/v1/admin/product', productRoutes)
 
 app.use(errorHandlerMiddleware)
 

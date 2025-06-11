@@ -4,6 +4,7 @@ import { UserRepository } from '../../repositories/user.repository'
 import { PrismaService } from '../../services/prisma.service'
 import { authMiddleware } from '../../middlewares/auth.middleware'
 import { requireAdmin } from '../../middlewares/require-admin.middleware'
+import { ApiResponseHandler } from '../../utils/api-response-handler'
 
 const adminUserRoutes = Router()
 const prismaService = new PrismaService()

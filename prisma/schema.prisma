@@ -35,12 +35,12 @@ enum ProductStatus {
 model User {
   id           String    @id @default(uuid())
   email        String    @unique
-  name         String?
-  passwordHash String // đổi tên từ `password` cho rõ ràng
-  role         Role      @default(USER) // dùng enum thay vì string thuần
+  name         String
+  passwordHash String
+  role         Role      @default(USER)
   address      String?
   phoneNumber  String?
-  refreshToken String? // đổi tên rõ nghĩa hơn, camelCase
+  refreshToken String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   Media        Media[]
@@ -70,9 +70,8 @@ model Product {
   description String? // Mô tả sản phẩm
   price       Int // Giá bán (đơn vị: VNĐ)
   stock       Int // Số lượng tồn kho
-  status      ProductStatus @default(AVAILABLE) // Trạng thái hàng hóa
-  image       Media?     @relation(fields: [imageId], references: [id]) // Ảnh đại diện sản phẩm
-  imageId     String?
+  status      ProductStatus? @default(AVAILABLE) // Trạng thái hàng hóa
+  media       Media[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -80,5 +79,4 @@ model Product {
   createdById String
 
   @@index([createdById])
-  @@index([imageId])
 }

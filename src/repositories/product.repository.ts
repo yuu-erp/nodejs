@@ -9,19 +9,48 @@ export class ProductRepostory {
     description: string
     price: number
     stock: number
-    status: 'AVAILABLE' | 'OUT_OF_STOCK' | 'DISCONTINUED'
     createdById: string
-    imageId?: string
+    mediaIds?: string[]
   }): Promise<Product> {
-    return this.productPrisma.product.create({ data: item })
+    console.log(item)
+    return await this.productPrisma.product.create({
+      data: {
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        stock: item.stock,
+        createdById: item.createdById,
+        media: item.mediaIds ? { connect: item.mediaIds.map((id) => ({ id })) } : undefined
+      },
+      include: {
+        media: true
+      }
+    })
   }
 
   async findItemById(id: string): Promise<Product | null> {
     return await this.productPrisma.product.findUnique({ where: { id } })
   }
 
-  async updateItem(id: string, item: Product) {
-    return this.productPrisma.product.update({ where: { id }, data: item })
+  async updateItem(
+    id: string,
+    item: {
+      name: string
+      description: string
+      price: number
+      stock: number
+      status: 'AVAILABLE' | 'OUT_OF_STOCK' | 'DISCONTINUED'
+      mediaIds?: string[]
+    }
+  ) {
+    console.log(item)
+    return await this.productPrisma.product.update({
+      where: { id },
+      data: {
+        ...item,
+        media: item.mediaIds ? { connect: item.mediaIds.map((id) => ({ id })) } : undefined
+      }
+    })
   }
 
   async deleteItem(id: string): Promise<Product> {
