@@ -36,47 +36,47 @@ model User {
   id           String    @id @default(uuid())
   email        String    @unique
   name         String?
-  passwordHash String // đổi tên từ `password` cho rõ ràng
-  role         Role      @default(USER) // dùng enum thay vì string thuần
+  passwordHash String
+  role         Role      @default(USER)
   address      String?
   phoneNumber  String?
-  refreshToken String? // đổi tên rõ nghĩa hơn, camelCase
+  refreshToken String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  Media        Media[]
-  Product      Product[]
+  media        Media[]   // Đổi tên thành media cho nhất quán
+  products     Product[] // Đổi tên thành products cho nhất quán
 }
 
 model Media {
   id           String       @id @default(uuid())
-  url          String // Đường dẫn tới file (local hoặc URL S3)
-  mimeType     MimeType // MIME type của file, dùng enum để nhất quán
-  size         Int // Kích thước file (byte)
-  originalName String? // Tên file gốc (optional)
-  description  String? // Mô tả file (optional)
-  status       MediaStatus? // Trạng thái file (optional, nếu cần)
+  url          String
+  mimeType     MimeType
+  size         Int
+  originalName String?
+  description  String?
+  status       MediaStatus? @default(UPLOADED)
   uploadedAt   DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt // Thêm để theo dõi cập nhật
-  user         User         @relation(fields: [userId], references: [id]) // Quan hệ bắt buộc
+  updatedAt    DateTime     @updatedAt
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
-  productId  Product? @relation(fields: [product], references: [id])
-  product String?
+  product      Product?     @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId    String?
 
-  @@index([userId]) // Thêm chỉ mục cho userId
+  @@index([userId])
+  @@index([productId])
 }
 
 model Product {
   id          String        @id @default(uuid())
-  name        String // Tên sản phẩm (VD: Mắm nêm, Mắm ruốc,...)
-  description String? // Mô tả sản phẩm
-  price       Int // Giá bán (đơn vị: VNĐ)
-  stock       Int // Số lượng tồn kho
-  status      ProductStatus @default(AVAILABLE) // Trạng thái hàng hóa
-  image       Media[]
+  name        String
+  description String?
+  price       Int
+  stock       Int
+  status      ProductStatus @default(AVAILABLE)
+  media       Media[]       @relation // Đổi tên thành media cho nhất quán
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-
-  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdBy   User          @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String
 
   @@index([createdById])
