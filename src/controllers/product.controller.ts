@@ -27,18 +27,24 @@ export class ProductController {
                 res.status(403).json({ message: 'Forbidden' })
                 return
             }
-            const { name, description, price, stock, imageId } = req.body
+            const { name, description, price, stock } = req.body
             const ItemId = req.params.id
-            if (!name || !description || !price || !stock || !imageId) throw new Error("dữ liệu không được để trống")
+            
+            // Kiểm tra sản phẩm tồn tại
             const findItem = await this.productRepostory.findItemById(ItemId)
-            if (!findItem) throw new Error("không có dữ liệu")
-            const updateItems = {
-                name: req.body.name ?? findItem.name,
-                description: req.body.description ?? findItem.description,
-                price: req.body.price ?? findItem.price,
-                stock: req.body.stock ?? findItem.stock,
-                imageId: req.body.imageId ?? findItem
+            if (!findItem) {
+                res.status(404).json({ message: 'Sản phẩm không tồn tại' })
+                return
             }
+            
+            // Chỉ update những field được cung cấp
+            const updateItems = {
+                name: name ?? findItem.name,
+                description: description ?? findItem.description,
+                price: price ?? findItem.price,
+                stock: stock ?? findItem.stock,
+            }
+            
             await this.productRepostory.updateItem(ItemId, updateItems)
             res.status(200).json({ message: 'Cập nhật thành công' });
 
@@ -53,20 +59,32 @@ export class ProductController {
                 return
             }
             const itemId = req.params.id
-            if (!itemId) throw new Error("không tìm thấy sản phẩm")
+            if (!itemId) {
+                res.status(400).json({ message: 'ID sản phẩm không được để trống' })
+                return
+            }
+            
+            // Kiểm tra sản phẩm tồn tại
             const findItem = await this.productRepostory.findItemById(itemId)
-            if (!findItem) throw new Error("không tìm thấy id sản phẩm")
+            if (!findItem) {
+                res.status(404).json({ message: 'Sản phẩm không tồn tại' })
+                return
+            }
+            
+            // Xóa các media liên quan trước
+            const productMedia = await this.mediaRepotori.findByProductId(itemId)
+            if (productMedia.length > 0) {
+                const mediaIds = productMedia.map(media => media.id)
+                await this.mediaRepotori.removeManymedia(mediaIds)
+            }
+            
+            // Xóa sản phẩm
             await this.productRepostory.deleteItem(itemId)
-            const lengthImage = findItem.
-            const imageIdToDelete: string | null = lengthImage
-            const arrImage: string[] = []
-            if (typeof imageIdToDelete === 'string' && imageIdToDelete.length > 0) {
-                arrImage.push(imageIdToDelete);
-            }
-            if (arrImage.length > 0) {
-                await this.mediaRepotori.removeManymedia(arrImage)
-            }
-
+            
+            res.status(200).json({ 
+                message: 'Xóa sản phẩm thành công',
+                deletedMediaCount: productMedia.length
+            });
 
         } catch (error) {
             res.status(500).json({ message: (error as Error).message })
