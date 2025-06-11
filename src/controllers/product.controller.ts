@@ -7,16 +7,20 @@ export class ProductController {
   constructor(
     private readonly productRepostory: ProductRepostory,
     private readonly mediaRepotori: MediaRepository
-  ) {}
+  ) { }
   createProduct = async (req: Request, res: Response) => {
     try {
       if (!req.user || !isAdmined(req.user)) {
         res.status(403).json({ message: 'Forbidden' })
         return
       }
-      const item = req.body
-      if (!item) throw new Error('không có dữ liệu')
-      await this.productRepostory.createItem(item)
+      const { name, description, price, stock, media } = req.body
+      if (!name) throw new Error('vui lòng điền tên')
+      if (!description) throw new Error('vui lòng điền description')
+      if (!price) throw new Error('vui lòng điền price')
+      if (!stock) throw new Error('vui lòng điền stock')
+
+      await this.productRepostory.createItem({ name, description, price, stock, media })
       res.status(201).json({ message: 'Product created successfully' })
     } catch (error) {
       res.status(500).json({ message: (error as Error).message })
@@ -57,15 +61,12 @@ export class ProductController {
       const findItem = await this.productRepostory.findItemById(itemId)
       if (!findItem) throw new Error('không tìm thấy id sản phẩm')
       await this.productRepostory.deleteItem(itemId)
-      const lengthImage = '1'
-      const imageIdToDelete: string | null = lengthImage
-      const arrImage: string[] = []
-      if (typeof imageIdToDelete === 'string' && imageIdToDelete.length > 0) {
-        arrImage.push(imageIdToDelete)
-      }
-      if (arrImage.length > 0) {
-        await this.mediaRepotori.removeManymedia(arrImage)
-      }
+      const lengthImage = findItem.media
+      console.log(typeof lengthImage)
+
+      // if (lengthImage.length > 0) {
+      //   // await this.mediaRepotori.removeManymedia()
+      // }
     } catch (error) {
       res.status(500).json({ message: (error as Error).message })
     }

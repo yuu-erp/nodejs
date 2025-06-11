@@ -13,9 +13,9 @@ export class ProductRepostory {
     stock: number
     status: 'AVAILABLE' | 'OUT_OF_STOCK' | 'DISCONTINUED'
     createdById: string
-    imageId?: string
+    media?: []
   }): Promise<Product> {
-    return await this.productPrisma.product.create({ data: item })
+    return await this.productPrisma.product.create({ data:item })
   }
 
   async findItemById(id: string): Promise<ProductWithMedia | null> {
