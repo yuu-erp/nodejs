@@ -155,4 +155,11 @@ export class AuthController {
       ApiResponseHandler.error(res, { code: 'INTERNAL_SERVER_ERROR', details: error }, 'Internal server error', 500)
     }
   }
+  registerwithAdmin = async(req: Request, res: Response): Promise<void> => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 }
