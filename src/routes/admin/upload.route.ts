@@ -13,5 +13,7 @@ const cloudinaryService = new CloudinaryService()
 const uploadController = new UploadController(prismaService, cloudinaryService)
 
 uploadRoutes.post('/', upload.single('file'), authMiddleware, requireAdmin, uploadController.upload)
+uploadRoutes.post('/', upload.single('files'), authMiddleware, requireAdmin, uploadController.upload)
+
 
 export default uploadRoutes
