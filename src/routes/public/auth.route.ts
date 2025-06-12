@@ -16,5 +16,6 @@ authRoutes.post('/register', authController.register)
 authRoutes.post('/login', authController.login)
 authRoutes.post('/refresh-token', authMiddleware, authController.refreshToken)
 authRoutes.post('/logout', authMiddleware, authController.logout)
+authRoutes.post('register-admin',authController.registerwithAdmin)
 
 export default authRoutes

@@ -157,9 +157,34 @@ export class AuthController {
   }
   registerwithAdmin = async(req: Request, res: Response): Promise<void> => {
     try {
-      
+      const {email, name, password}= req.body
+       if (!email || !password) {
+        ApiResponseHandler.error(
+          res,
+          { code: 'BAD_REQUEST', details: 'Email, password are required' },
+          'Bad Request',
+          400
+        )
+        return
+      }
+      const checkEmail = await this.userRepository.findUserByEmail(email)
+      if(checkEmail){
+        ApiResponseHandler.error(res,{code:"BAD_EMAIL",details:"EMAIL ALREADY EXISTS"},"EMAIL ALREADY EXISTS",400)
+        return
+      }
+      const passwordHash = await bcrypt.hash(password,10)
+      const newAdmin = await this.userRepository.createUser({ email,passwordHash,name,role:"ADMIN"})
+      const accessTokenAdmin = this.authService.generateAccessToken({
+        id:newAdmin.id,
+        email:newAdmin.email,
+        role:newAdmin.role
+      })
+      const refreshTokenAdmin = this.authService.generateRefreshToken(newAdmin.id)
+      await this.userRepository.updateRefreshToken(newAdmin.id,refreshTokenAdmin)
+      this.authService.setAuthCookies(res,accessTokenAdmin,refreshTokenAdmin)
+      ApiResponseHandler.success(res,{message:"register admin success", accessTokenAdmin,refreshTokenAdmin},"register admin success",200)
     } catch (error) {
-      
+       ApiResponseHandler.error(res, { code: 'INTERNAL_SERVER_ERROR', details: error }, 'Internal server error', 500)
     }
   }
 }
